@@ -148,7 +148,7 @@ function minusDigit(max_array, min_array) {
  */
 function inputNumbers() {
 	//intialize the number array 
-	let num1Array = [1,2,3], num2Array = ["r"]
+	let num1Array = [2,0], num2Array = [5,0,0]
 	//printing the numbers
 	console.log("The number1 is " + num1Array)
 	console.log("The number2 is " + num2Array)
@@ -163,11 +163,14 @@ function inputNumbers() {
 		console.log(subtraction(num1Array, num2Array))
 		console.log("the multiplied array is")
 		console.log(multiplying(num1Array, num2Array))
+		console.log("the quotient and remainder are")
+		dividing(num1Array,num2Array)
 	}
 	else{
 		throw new Error("Testing case failed or length is smaller than 0");
 	}
 }
+
 
 
 /** This function is testing the element of the array
@@ -186,18 +189,97 @@ function testingNumber(numArray) {
 }
 
 
-/**This function is for dividing the number present in the array.
- * @param {Array} divident It takes input num1 which is divident
- * @param {Array} divisor It takes input num2 which is divisor
- * @return {Array} quotientArray It returns the quotient array
- * @returns {Array} remainderArray It return the remainder array
- */
 
-// function dividing(divisor,divident){
+/**This Function is responsible for checking if passed parameter is greater or 
+* smaller than other
+* @param {Array} array1 first array 
+* @param {Array} array2 second array 
+*/
+function dividing(divisor,dividend) {
+    // Ensure divisor and dividend are not empty
+    if (divisor.length === 0 || dividend.length === 0) {
+			throw new Error("Divisor or dividend cannot be empty.");
+	}
 
-// 	let maxLength = Math.max(divisor.length, divident.length);
+	// Handle division by zero
+	if (isEqual(divisor, [0])) {
+			throw new Error("Division by zero error.");
+	}
+
+	// Initialize quotient and remainder arrays
+	let quotientArray = [];
+	let remainderArray = [];
+
+	// Iterate through each digit of the dividend
+	for (let i = 0; i < dividend.length; i++) {
+			// Bring down the next digit from the dividend
+			remainderArray.push(dividend[i]);
+
+			// Perform division
+			let quotientDigit = 0;
+
+			while (isGreaterOrEqual(remainderArray, divisor)) {
+					remainderArray = subtract(remainderArray, divisor);
+					quotientDigit++;
+			}
+
+			quotientArray.push(quotientDigit);
+
+	}
 	
-// 	while(divident,)
 
-// }
+	// Remove leading zeros from quotient
+	quotientArray = removeLeadingZeros(quotientArray);
 
+	// Return quotient and remainder
+	console.log(quotientArray);
+
+	console.log(remainderArray.reverse());
+
+}
+
+// Function to check if array a is greater than or equal to array b
+function isGreaterOrEqual(a, b) {
+	if (a.length > b.length) return true;
+	if (a.length < b.length) return false;
+	for (let i = 0; i < a.length; i++) {
+			if (a[i] > b[i]) return true;
+			if (a[i] < b[i]) return false;
+	}
+	return true;
+}
+
+// Function to subtract array b from array a
+function subtract(a, b) {
+	let result = [];
+	let borrow = 0;
+	for (let i = a.length - 1; i >= 0; i--) {
+			let diff = a[i] - (b[i] || 0) - borrow;
+			if (diff < 0) {
+					diff += 10;
+					borrow = 1;
+			} else {
+					borrow = 0;
+			}
+			result.unshift(diff);
+	}
+	return result;
+}
+
+// Function to remove leading zeros from an array
+function removeLeadingZeros(array) {
+	let i = 0;
+	while (i < array.length - 1 && array[i] === 0) {
+			i++;
+	}
+	return array.slice(i);
+}
+
+// Function to check if two arrays are equal
+function isEqual(array1, array2) {
+	if (array1.length !== array2.length) return false;
+	for (let i = 0; i < array1.length; i++) {
+			if (array1[i] !== array2[i]) return false;
+	}
+	return true;
+}
