@@ -58,42 +58,32 @@ function subtraction(num1Array, num2Array) {
 	return subArray;
 }
 
-
-/**Multiplying the two numbers 
- * @param {Array} num1Array It takes num1 (array) as input
- * @param {Array} num2Array It takes num2 (array) as input 
- * @returns {Array} subArray It return the calculated array 
- */
 function multiplying(num1Array, num2Array) {
-    let mulArray = [0]; // Initialize the result array with 0
+	let mulArray = []; // Initialize the result array
 
-    // Iterate through each digit of the second number
-    for (let index2 = num2Array.length - 1; index2 >= 0; index2--) {
-        let carry = 0;
-        let tempResult = []; // Temporary result for current digit multiplication
+	// Iterate through each digit of the second number in reverse order
+	for (let index2 = num2Array.length - 1; index2 >= 0; index2--) {
+			let carry = 0;
+			let tempResult = new Array(num2Array.length - 1 - index2).fill(0); // Add appropriate number of leading zeros
 
-        // Multiply current digit of the second number with each digit of the first number
-        for (let index = num1Array.length - 1; index >= 0; index--) {
-            let product = num1Array[index] * num2Array[index2] + carry;
-            tempResult.unshift(product % 10); // Add the least significant digit to the temporary result
-            carry = Math.floor(product / 10); // Update the carry
-        }
-        // If there's any remaining carry after multiplying all digits of the first number
-        if (carry > 0) {
-            tempResult.unshift(carry);
-        }
-		// Add appropriate number of zeros to the end of temporary result based on position
-        for (let k = num2Array.length - 1; k > index2; k--) {
-            tempResult.push(0);
-        }
-		
-        // Add the temporary result to the final result
-        mulArray = addition(mulArray, tempResult);
-    }
-    return mulArray;
+			// Multiply current digit of the second number with each digit of the first number
+			for (let index = num1Array.length - 1; index >= 0; index--) {
+					let product = num1Array[index] * num2Array[index2] + carry;
+					tempResult.unshift(product % 10); // Add the least significant digit to the temporary result
+					carry = Math.floor(product / 10); // Update the carry
+			}
+
+			// If there's any remaining carry after multiplying all digits of the first number
+			if (carry > 0) {
+					tempResult.unshift(carry);
+			}
+
+			// Add the temporary result to the final result
+			mulArray = addition(mulArray, tempResult);
+	}
+
+	return mulArray;
 }
-
-
 
 /**substracting the individual digits and passed acc to their max and min
  * @param {Array} max_array The greater number in either of two 
@@ -148,7 +138,7 @@ function minusDigit(max_array, min_array) {
  */
 function inputNumbers() {
 	//intialize the number array 
-	let num1Array = [2,0], num2Array = [5,0,0]
+	let num1Array = [2,4], num2Array = [2,4,0]
 	//printing the numbers
 	console.log("The number1 is " + num1Array)
 	console.log("The number2 is " + num2Array)
@@ -163,7 +153,7 @@ function inputNumbers() {
 		console.log(subtraction(num1Array, num2Array))
 		console.log("the multiplied array is")
 		console.log(multiplying(num1Array, num2Array))
-		console.log("the quotient and remainder are")
+		console.log("the quotient  are")
 		dividing(num1Array,num2Array)
 	}
 	else{
@@ -205,7 +195,6 @@ function dividing(divisor,dividend) {
 	if (isEqual(divisor, [0])) {
 			throw new Error("Division by zero error.");
 	}
-
 	// Initialize quotient and remainder arrays
 	let quotientArray = [];
 	let remainderArray = [];
@@ -214,29 +203,21 @@ function dividing(divisor,dividend) {
 	for (let i = 0; i < dividend.length; i++) {
 			// Bring down the next digit from the dividend
 			remainderArray.push(dividend[i]);
-
 			// Perform division
 			let quotientDigit = 0;
-
 			while (isGreaterOrEqual(remainderArray, divisor)) {
 					remainderArray = subtract(remainderArray, divisor);
 					quotientDigit++;
 			}
-
-			quotientArray.push(quotientDigit);
-
+			quotientArray.push(quotientDigit)
 	}
-	
-
 	// Remove leading zeros from quotient
 	quotientArray = removeLeadingZeros(quotientArray);
 
 	// Return quotient and remainder
 	console.log(quotientArray);
-
-	console.log(remainderArray.reverse());
-
 }
+
 
 // Function to check if array a is greater than or equal to array b
 function isGreaterOrEqual(a, b) {
